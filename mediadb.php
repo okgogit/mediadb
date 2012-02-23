@@ -13,7 +13,6 @@ License: GPL2
 
 // Include other PHP files
 require_once dirname(__FILE__) . '/pages/mediadb-settings-page.php';
-require_once dirname(__FILE__) . '/mediadb-user-profile-modification-functions.php';
 
 /**
  * Initialize custom scripts 
