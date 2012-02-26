@@ -11,6 +11,7 @@ License: GPL2
 
 // Constants
 define('MEDIADB_PLUGIN_PATH', dirname(__FILE__));
+define('MEDIADB_PLUGIN_URL',WP_PLUGIN_URL.'/'.basename(MEDIADB_PLUGIN_PATH));
 
 // Include PHP
 require_once('mediadb_shortcodes.php');

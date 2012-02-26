@@ -1,0 +1,30 @@
+/* mediadb-page shortcode css */
+#code-block {
+	background: #E1F3FD;
+	height: 50px;
+	padding: 12px;
+}
+#code-input {
+	font: 12px/15px helvetica, arial, sans-serif;
+	color: #808082;
+	height: 30px;
+	padding: 0 6px;
+	background: white;
+	border: solid 1px;
+}
+#valid-code {
+	font: 12px/15px helvetica, arial, sans-serif;
+        color: #000;
+        height: 30px;
+        padding: 0 6px;
+        background: #E1F3FD;
+        border: solid 1px;
+}
+#mediaselectform {
+	background: #E1F3FD;
+	padding: 12px;
+}
+#media-selection {
+	font: 12px/15px helvetica, arial, sans-serif;
+	width: 100%;
+}
