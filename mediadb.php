@@ -8,29 +8,85 @@ Author: eThan
 Author URI: 
 License: GPL2
 */
-?>
-<?php
 
-// Include other PHP files
-require_once dirname(__FILE__) . '/pages/mediadb-settings-page.php';
+// Constants
+define('MEDIADB_PLUGIN_PATH', dirname(__FILE__));
+
+// Include PHP
+require_once('mediadb_shortcodes.php');
+
+// Register hooks
+register_activation_hook(__FILE__,'mediadb_install');  // Runs when plugin is activated
+register_deactivation_hook( __FILE__, 'mediadb_uninstall' ); // Runs on plugin deactivation
 
 /**
  * Initialize custom scripts 
  */
 function mediadb_enqueue($hook) {
-    if ( $hook != 'profile.php' ) // do not enqueue if this is not the user profile view/edit page 
-        return;
-    wp_enqueue_script( 'jquery' );
-    wp_enqueue_script( 'code-validator.js', plugins_url('js/code-validator.js', __FILE__) );
+	/*if ( $hook != 'profile.php' ) // do not enqueue if this is not the user profile view/edit page 
+	return;
+	wp_enqueue_script( 'jquery' );
+	wp_enqueue_script( 'code-validator.js', plugins_url('js/code-validator.js', __FILE__) );*/
 }
 //add_action( 'admin_enqueue_scripts', 'mediadb_enqueue' );
 
 /** 
  * Add Administration Menu
  */
-add_action('admin_menu', 'mediadb_add_admin_menu');
 function mediadb_add_admin_menu() {
-    add_options_page('Media Database', 'Media Database', 'administrator', 'mediadb', 'mediadb_admin_settings_page');
+	add_options_page('Media Database', 'Media Database', 'administrator', 'mediadb', 'mediadb_admin_settings_page');
+}
+//add_action('admin_menu', 'mediadb_add_admin_menu');
+
+/**
+ * mediadb_install
+ * 
+ * Performs tasks for mediadb plugin install
+ */
+function mediadb_install() {
+	// create valid codes table
+	mediadb_runsql('mediadb_validcodes.sql');
+
+	// add first set of codes
+	mediadb_runsql('mediadb_validcodes_fill.sql');
+	
+	// add second set of codes from merchdirect
+	global $wpdb;
+	$data = simplexml_load_file('http://merchdirect.com/x/xml/promoCodes.php?key=03dae3a2de4e92ead443d7cf413ca2cc');
+	foreach ($data->code as $code) {
+		$sql = "INSERT INTO " . $wpdb->prefix . "mediadb_validcodes VALUES ('" . $code . "')";
+		$wpdb->query($sql);
+	}
+}
+
+/** 
+ * mediadb_uninstall
+ * 
+ * Performs taks for mediadb plugin uninstall
+ */
+function mediadb_uninstall() {
+	// remove valid codes table from wordpress db
+	global $wpdb;
+	$table_name = $wpdb->prefix.'mediadb_validcodes';
+	$sql = "DROP TABLE ". $table_name;
+	$wpdb->query($sql);
+}
+
+/**
+ * mediadb_run_sql
+ *
+ * Runs specified sql file using wordpress database 
+ */
+function mediadb_runsql($filename) {
+	$file = MEDIADB_PLUGIN_PATH.'/sql/'.$filename;
+	if( file_exists($file) ) {
+		global $wpdb;  // the Wordpress database
+		ob_start();
+		include($file);
+		$sql = ob_get_contents();
+		ob_end_clean();
+		$wpdb->query($sql);
+	}
 }
 
 
