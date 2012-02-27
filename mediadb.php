@@ -45,11 +45,12 @@ function mediadb_add_admin_menu() {
  * Performs tasks for mediadb plugin install
  */
 function mediadb_install() {
-	// create valid codes table
+	// create tables
 	mediadb_runsql('mediadb_validcodes.sql');
+	mediadb_runsql('mediadb_media.sql');
 
-	// add first set of codes
-	mediadb_runsql('mediadb_validcodes_fill.sql');
+	// fill tables
+	mediadb_runsql('mediadb_validcodes_fill.sql'); // first set of valid codes
 	
 	// add second set of codes from merchdirect
 	global $wpdb;
@@ -58,6 +59,9 @@ function mediadb_install() {
 		$sql = "INSERT INTO " . $wpdb->prefix . "mediadb_validcodes VALUES ('" . $code . "')";
 		$wpdb->query($sql);
 	}
+
+	// fill media table
+	mediadb_runsql('mediadb_media_fill.sql');
 }
 
 /** 
@@ -68,9 +72,11 @@ function mediadb_install() {
 function mediadb_uninstall() {
 	// remove valid codes table from wordpress db
 	global $wpdb;
-	$table_name = $wpdb->prefix.'mediadb_validcodes';
-	$sql = "DROP TABLE ". $table_name;
-	$wpdb->query($sql);
+	$tables_to_drop = array( $wpdb->prefix.'mediadb_validcodes', $wpdb->prefix.'mediadb_media' );
+	foreach ($tables_to_drop as $table) {
+		$sql = "DROP TABLE ". $table;
+		$wpdb->query($sql);
+	}
 }
 
 /**

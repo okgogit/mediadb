@@ -1,6 +1,6 @@
 <?php
 
-require_once('../../../themes/okgo-theme/library/ChromePHP/ChromePhp.php');
+//require_once('../../../themes/okgo-theme/library/ChromePHP/ChromePhp.php');
 
 global $wpdb;
 if(!isset($wpdb)) // if the $wpdb variable is not set, need to load wp files for it

@@ -26,5 +26,14 @@
 }
 #media-selection {
 	font: 12px/15px helvetica, arial, sans-serif;
-	width: 100%;
+	width: 80%;
+	height: 30px;
+}
+#media-submit {
+	height: 30px;
+	background-color: #98D9E7;
+	color: #fff;
+	font: 12px 'Kameron', serif;
+	border: none;
+	margin-top: -1px;
 }

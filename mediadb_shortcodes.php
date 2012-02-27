@@ -57,12 +57,17 @@ function mediadb_page() {
 				     </div>';
 		$content .= '</form>';
 		$content .= '<form id="mediaselectform">';
-		$content .= '<select id="media-selection">
-				<option>Select an Item</option>
-				<option value="otbcots-disc1">Of the Blue Colour of the Sky - Disc One</option>
-				<option value="otbcots-disc1-lossless">Of the Blue Colour of the Sky - Disc One (Lossless)</option>
-			     </select>
-			     <button id="media-submit" class="button-link">Download</button>';
+		$content .= '<select id="media-selection">';
+		
+		// add <option> tags 
+		global $wpdb;
+		$sql = "SELECT media_id, filename, description FROM wp_mediadb_media";
+		$media = $wpdb->get_results($sql);
+		foreach ($media as $item) {
+			$content .= '<option value="' . $item->media_id . '">' . $item->description . '</option>';
+		}
+		$content .= '</select>';
+		$content .= '<button id="media-submit" class="button-link">Download</button>';
 		$content .= '</form>';
 	
 		// if the user has entered a code disable the form
