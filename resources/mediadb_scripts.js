@@ -21,7 +21,12 @@ $.fn.vAlign = function() {
 
 // Scripts to handle code validation form
 $("#validcodeform").submit(function (e) {
-	if ( $("#code-input").val().length>0) {
+
+	// remove previous form message if there is one
+	$('#validcodeform-msg').remove();
+
+	// if user has entered a code, check to see if it is valid.
+	if ( $("#code-input").val().length>0 || $('#code-input').val() !== 'enter valid code' ) {
 		$.ajax({
 			url: '/wp-content/plugins/mediadb/js/codecheck.php',
 			type: "POST",
@@ -31,18 +36,26 @@ $("#validcodeform").submit(function (e) {
 			data:  { 'code' : $('#code-input').val(),
 				 'user_id' : $('#user-id').val() },
 			success: function (data) {
-				console.log(data);
-				if (data.status == "valid") {
-					console.log('valid!');
+				console.log('success');
+				console.log('data:'+data.status);
+				if (data.status == 'valid') {
 					$('#code-input').attr('disabled',true);
 					$('#code-input').css('background-color','#E1F3FD');
 					$('#code-input').css('color','#000');
 					$('#code-submit').hide();
-					$('#code-block').append('<strong> Code validated!</strong>');
+					$('#code-block').append('<span id="validcodeform-msg"><strong> Code validated!</strong></span>');
+					$('#mediaselectform').slideToggle();
 				} 
-				else {
-					console.log('invalid!');
+				if (data.status == 'invalid') {
+					$('#code-block').append('<span id="validcodeform-msg"><strong> Invalid code</strong></span>');
 				}
+				if (data.status == 'already used') {
+					$('#code-block').append('<span id="validcodeform-msg"><strong> Already used.</strong></span>');
+				}
+			},
+			error: function (xhr, textStatus) {
+				console.log(textStatus);
+				console.log(xhr);
 			}
 		});
 	} else {
@@ -60,7 +73,7 @@ $("#mediaselectform").submit(function (e) {
 		$.download('/wp-content/plugins/mediadb/js/mediadb_download.php', { 'media_id' : selectedMedia }, 'post');
         }
 	else {
-		console.log('there was no media selected');
+		alert('Please select something to download from the list.');
 	} 
         return false;
 });
@@ -91,10 +104,17 @@ jQuery.download = function(url, data, method){
 	};
 };
 
+
+// ** Misc code for page styles ** //
+
 // vertically align the code input fields within containing div
 $('label[for="code-input"]').vAlign();
 $('#code-input').vAlign();
 $('#valid-code').vAlign();	
 
+// if the user has not entered a code disable the mediaselection form
+if ( $('#valid-code').length == 0 ) { // the user has not entered a valid code
+	$('#mediaselectform').hide();
+}
 
 });

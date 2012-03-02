@@ -1,7 +1,11 @@
 <?php
 
-require_once('../../../themes/okgo-theme/library/ChromePHP/ChromePhp.php');
-ChromePhp::log('test');
+// If the user is not logged, then this might be a hack attempt; so give not found error.
+require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php' );
+if ( ! is_user_logged_in() ) { 
+    die('You do not have access. Sorry.'); 
+}
+
 global $wpdb;
 if(!isset($wpdb)) // if the $wpdb variable is not set, need to load wp files for it
 {
@@ -41,16 +45,12 @@ if (ALLOWED_REFERRER !== ''
 	die("Internal server error. Please contact system administrator.");
 }
 
-// Make sure program execution doesn't time out
-// Set maximum script execution time in seconds (0 means no limit)
-set_time_limit(0);
-
-if ( !isset($_GET['media_id']) || empty($_GET['media_id']) ) {
+if ( !isset($_POST['media_id']) || empty($_POST['media_id']) ) {
   die("Please specify file name for download.");
 }
 
 // identify which file has bene requested by querying database
-$media_id = $_GET['media_id'];
+$media_id = $_POST['media_id'];
 $sql = "SELECT media_id, filename FROM wp_mediadb_media WHERE media_id = '" . $media_id . "'";
 $result = $wpdb->get_results($sql);
 if ( count($result) == 1 ) {
@@ -61,7 +61,6 @@ if ( count($result) == 1 ) {
 // Check in subfolders too
 function find_file ($dirname, $fname, &$file_path) {
 	$dir = opendir($dirname);
-  	
 	while ($file = readdir($dir)) {
 		if (empty($file_path) && $file != '.' && $file != '..') {
       			if (is_dir($dirname.'/'.$file)) {
@@ -80,7 +79,6 @@ function find_file ($dirname, $fname, &$file_path) {
 // get full file path (including subfolders)
 $file_path = '';
 find_file(BASE_DIR, $file, $file_path);
-ChromePhp::log('file_path:',$file_path);
 
 // if the file doesn't exist, kill process.
 if (!is_file($file_path)) {
@@ -124,40 +122,41 @@ $filename = $file;
 $filename = str_replace(array('"',"'",'\\','/'), '', $filename);
 if ($file === '') $filename = 'NoName';
 
-// set headers
+//  misc settings
+ini_set('memory_limit',-1);
+set_time_limit(0);
+ini_set('max_execution_time',86400);
+ini_set('max_input_time',86400);
+//@apache_setenv('no-gzip', 1);
+@ini_set('zlib.output_compression', 0);
+
+// Send headers for download
 header("Pragma: public");
 header("Expires: 0");
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-header("Cache-Control: public");
 header("Content-Description: File Transfer");
-header("Content-Type: $mtype");
-header("Content-Disposition: attachment; filename=\"$filename\"");
+header("Content-Type: application/force-download");
+header("Content-Type: application/octet-stream");
+header("Content-Type: application/download");
+header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
 header("Content-Transfer-Encoding: binary");
-header("Content-Length: " . $fsize);
+header("Content-Length: ".$fsize);
+flush();
 
-// download
-/*$fd = fopen($file_path, "rb");
-while(!feof($fd)) {
-        print( fread($fd, 2048) );
+// Stream file
+$handle = fopen( $file_path, 'rb' );
+$chunksize = 1*(1024*1024); 
+$buffer = '';
+if ($handle === false) {
+	die('fopen failed to open the file.');
+}
+while (!feof($handle)) {
+	$buffer = fread($handle, $chunksize);
+	echo $buffer;
 	flush();
-        echo $buffer;
-}
-fclose($fd);*/
-
-// @readfile($file_path);
-$file_to_download = @fopen($file_path,"rb");
-if ($file_to_download) {
-  while(!feof($file_to_download)) {
-    print(fread($file_to_downoad, 1024*8));
-    flush();
-    if (connection_status()!=0) {
-      @fclose($file_to_download);
-      die();
-    }
-  }
-  @fclose($file_to_download);
 }
 
-
+// Close file
+fclose($handle);
 
 ?>

@@ -25,7 +25,7 @@ INSERT INTO `<?php echo $wpdb->prefix;?>mediadb_media` VALUES
 	(UUID(),'otbcots-track20.zip','Of the Blue Colour of the Sky - Disc Two - Track 20 (Lossless)'),
 	(UUID(),'otbcots-track21.zip','Of the Blue Colour of the Sky - Disc Two - Track 21 (Lossless)'),
 	(UUID(),'otbcots-track22.zip','Of the Blue Colour of the Sky - Disc Two - Track 22 (Lossless)'),
-	(UUID(),'TwelveRemixesofFourSongs.zip','twelve-remixes">Twelve Remixes of Four Songs'),
+	(UUID(),'TwelveRemixesofFourSongs.zip','Twelve Remixes of Four Songs'),
 	(UUID(),'remixes-track1.zip','Twelve Remixes of Four Songs - Track 1 (Lossless)'),
 	(UUID(),'remixes-track2.zip','Twelve Remixes of Four Songs - Track 2 (Lossless)'),
 	(UUID(),'remixes-track3.zip','Twelve Remixes of Four Songs - Track 3 (Lossless)'),
@@ -38,8 +38,8 @@ INSERT INTO `<?php echo $wpdb->prefix;?>mediadb_media` VALUES
 	(UUID(),'remixes-track10.zip','Twelve Remixes of Four Songs - Track 10 (Lossless)'),
 	(UUID(),'remixes-track11.zip','Twelve Remixes of Four Songs - Track 11 (Lossless)'),
 	(UUID(),'remixes-track12.zip','Twelve Remixes of Four Songs - Track 12 (Lossless)'),
-	(UUID(),'OkgoRemixWeek1.zip','Remix Contest Winners - Week 1'),
-	(UUID(),'OkgoRemixWeek2.zip','Remix Contest Winners - Week 2'),
-	(UUID(),'OkgoRemixWeek3.zip','Remix Contest Winners - Week 3'),
-	(UUID(),'OkgoRemixWeek4.zip','Remix Contest Winners - Week 4'),
-	(UUID(),'OkgoRemixWeek5.zip','Remix Contest Winners - Week 5');
+	(UUID(),'OKGoRemixWeek1.zip','Remix Contest Winners - Week 1'),
+	(UUID(),'OKGoRemixWeek2.zip','Remix Contest Winners - Week 2'),
+	(UUID(),'OKGoRemixWeek3.zip','Remix Contest Winners - Week 3'),
+	(UUID(),'OKGoRemixWeek4.zip','Remix Contest Winners - Week 4'),
+	(UUID(),'OKGoRemixWeek5.zip','Remix Contest Winners - Week 5');

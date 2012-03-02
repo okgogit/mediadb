@@ -27,7 +27,7 @@ function mediadb_enqueue($hook) {
 	/*if ( $hook != 'profile.php' ) // do not enqueue if this is not the user profile view/edit page 
 	return;
 	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'code-validator.js', plugins_url('js/code-validator.js', __FILE__) );*/
+	wp_enqueue_script( 'code-validator.js', plugins_url('resources/code-validator.js', __FILE__) );*/
 }
 //add_action( 'admin_enqueue_scripts', 'mediadb_enqueue' );
 

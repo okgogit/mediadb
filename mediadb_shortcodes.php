@@ -12,13 +12,11 @@ function mediadb_page() {
 	if ( is_user_logged_in() == FALSE  ) { 
 
 		// output a user login form to prompt the user to login
-		$content = '<link rel="stylesheet" href="' . get_bloginfo('url') . '/wp-admin/css/login.css" type="text/css" />';
-
 		$content .=  '<h2>Please login in order to access the Of The Colour of the Blue Sky <em>Database</em>.</h2>';		
 
 		$content .=  '<div id="login">';
 
-		$content .=  '<form name="loginform" id="loginform" action="' . get_bloginfo('url') . '/wp-login.php" method="post">';
+		$content .=  '<form name="mediadb-loginform" id="mediadb-loginform" action="' . get_bloginfo('url') . '/wp-login.php" method="post">';
 		$content .=  '	<p>
 			<label for="user_login">Username<br />
 			<input type="text" name="log" id="user_login" class="input" value="" size="10" tabindex="10" /></label>
@@ -39,14 +37,17 @@ function mediadb_page() {
 			  <input type="hidden" name="testcookie" value="1" />
 			</p>';
 		$content .=  '</form>';
-
+		$content .=  '<p id="nav">
+			      <a href="' . get_bloginfo('url') . '/wp-login.php?action=register&redirect_to=' . urlencode(get_bloginfo('url') . '/database') . '">Register</a> |
+			      <a href="' . get_bloginfo('url') . '/wp-login.php?action=lostpassword&redirect_to=' . urlencode(get_bloginfo('url') . '/database') . '">Lost your password?</a>
+    			     </p>';
 	}
 	else {
 
 		// output the database description
 		$content = '<p>Welcome! This is an experiment for us. The impetus behind the database is that we have a lot of material that was created for our latest album release, Of The Blue Colour Of The Sky, and not all of it fits into a retailer’s vision of what should live on the shelf of their store. So we thought we’d give everyone who buys the Extra Nice Edition of the album access to this webpage where you can download whatever else we think to release, without us having to find some other clever way of finding you.</p><p>To begin, we’ve got the first disc of the album, in case you bought the physical CD and didn’t feel like ripping it yourself. Second is a collection of new OK Go remixes that we are particularly excited about. So, like we said, it’s an experiment. Let us know what you think, and if anything doesn’t work quite right, please let us know that too by emailing us at: okgodatabasehelp<at>gmail dot com</p>';
 
-		// output the database access forms
+		// database access forms content
 		$content .= '<form id="validcodeform">';
 		$content .= '<div id="code-block">
 				     <label for="code-input">Your Database Code:</label>
@@ -56,21 +57,8 @@ function mediadb_page() {
 				     <input type="hidden" id="user-id" value="' . get_current_user_id() . '" />
 				     </div>';
 		$content .= '</form>';
-		$content .= '<form id="mediaselectform">';
-		$content .= '<select id="media-selection">';
 		
-		// add <option> tags 
-		global $wpdb;
-		$sql = "SELECT media_id, filename, description FROM wp_mediadb_media";
-		$media = $wpdb->get_results($sql);
-		foreach ($media as $item) {
-			$content .= '<option value="' . $item->media_id . '">' . $item->description . '</option>';
-		}
-		$content .= '</select>';
-		$content .= '<button id="media-submit" class="button-link">Download</button>';
-		$content .= '</form>';
-	
-		// if the user has entered a code disable the form
+		// if the user has already entered a code, modify the form to simply display their code.
 		$db_code_is = get_user_meta( get_current_user_id(), 'mediadb_codestatus', true);
 		if ( $db_code_is == "valid" ) {
 			$search = array(
@@ -84,8 +72,22 @@ function mediadb_page() {
 			$content = str_replace($search, $replace, $content);
 		}
 
-		// Now output the database contents
+		// Create media selection form
+		$content .= '<form id="mediaselectform">';
+		$content .= '<select id="media-selection">';
+
+			// create <option> tags
+			global $wpdb;
+			$sql = "SELECT media_id, filename, description FROM wp_mediadb_media";
+			$media = $wpdb->get_results($sql);
+			foreach ($media as $item) {
+				$content .= '<option value="' . $item->media_id . '">' . $item->description . '</option>';
 			}
+
+		$content .= '</select>';
+		$content .= '<button id="media-submit" class="button-link">Download</button>';
+		$content .= '</form>';
+	}
 	return $content;
 }	
 add_shortcode('mediadb-page', 'mediadb_page');
@@ -113,7 +115,7 @@ function conditionally_add_scripts_and_styles($posts){
 	if ($shortcode_found) {
 		// enqueue here
 		wp_enqueue_style('mediadb-style', MEDIADB_PLUGIN_URL . '/css/mediadb.css');
-		wp_enqueue_script('mediadb-script', MEDIADB_PLUGIN_URL . '/js/mediadb-scripts.js');
+		wp_enqueue_script('mediadb-script', MEDIADB_PLUGIN_URL . '/resources/mediadb_scripts.js');
 	}
  
 	return $posts;

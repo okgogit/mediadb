@@ -1,7 +1,5 @@
 <?php
 
-//require_once('../../../themes/okgo-theme/library/ChromePHP/ChromePhp.php');
-
 global $wpdb;
 if(!isset($wpdb)) // if the $wpdb variable is not set, need to load wp files for it
 {
@@ -58,7 +56,7 @@ function is_unique_code($user_id, $code) {
 	global $wpdb;
 
 	$sql = "SELECT * FROM wp_usermeta 
-		WHERE meta_key = 'code' 
+		WHERE meta_key = 'mediadb_code' 
 		AND meta_value = '" . mysql_real_escape_string($code) . "' 
 		AND user_id != '" . $user_id . "'";
 
