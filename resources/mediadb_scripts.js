@@ -28,7 +28,7 @@ $("#validcodeform").submit(function (e) {
 	// if user has entered a code, check to see if it is valid.
 	if ( $("#code-input").val().length>0 || $('#code-input').val() !== 'enter valid code' ) {
 		$.ajax({
-			url: '/wp-content/plugins/mediadb/js/codecheck.php',
+			url: mediadbAjax.pluginURL+'/resources/codecheck.php',
 			type: "POST",
 			async: false,
 			cache: false,
@@ -36,8 +36,8 @@ $("#validcodeform").submit(function (e) {
 			data:  { 'code' : $('#code-input').val(),
 				 'user_id' : $('#user-id').val() },
 			success: function (data) {
-				console.log('success');
-				console.log('data:'+data.status);
+				//console.log('success');
+				//console.log('data:'+data.status);
 				if (data.status == 'valid') {
 					$('#code-input').attr('disabled',true);
 					$('#code-input').css('background-color','#E1F3FD');
@@ -70,7 +70,7 @@ $("#mediaselectform").submit(function (e) {
 	var selectedMedia = $('#media-selection option:selected').val();
 	console.log(selectedMedia);
         if ( selectedMedia !== '' ) {
-		$.download('/wp-content/plugins/mediadb/js/mediadb_download.php', { 'media_id' : selectedMedia }, 'post');
+		$.download(mediadbAjax.pluginURL+'/resources/mediadb_download.php', { 'media_id' : selectedMedia }, 'post');
         }
 	else {
 		alert('Please select something to download from the list.');

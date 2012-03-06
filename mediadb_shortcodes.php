@@ -12,7 +12,7 @@ function mediadb_page() {
 	if ( is_user_logged_in() == FALSE  ) { 
 
 		// output a user login form to prompt the user to login
-		$content .=  '<h2>Please login in order to access the Of The Colour of the Blue Sky <em>Database</em>.</h2>';		
+		$content .=  '<p>Welcome to the "Of The Blue Colour of the Sky" online database. If you bought the Extra Nice Edition of the album then you should have an access code for this online database. Please take a moment to register with the site below to gain access to the exclusive, downloadable content. We hope you enjoy it! And if you have any problems registering, please email <a href="mailto:webmaster@okgo.net">webmaster@okgo.net</a>.</p>';		
 
 		$content .=  '<div id="login">';
 
@@ -45,7 +45,7 @@ function mediadb_page() {
 	else {
 
 		// output the database description
-		$content = '<p>Welcome! This is an experiment for us. The impetus behind the database is that we have a lot of material that was created for our latest album release, Of The Blue Colour Of The Sky, and not all of it fits into a retailer’s vision of what should live on the shelf of their store. So we thought we’d give everyone who buys the Extra Nice Edition of the album access to this webpage where you can download whatever else we think to release, without us having to find some other clever way of finding you.</p><p>To begin, we’ve got the first disc of the album, in case you bought the physical CD and didn’t feel like ripping it yourself. Second is a collection of new OK Go remixes that we are particularly excited about. So, like we said, it’s an experiment. Let us know what you think, and if anything doesn’t work quite right, please let us know that too by emailing us at: okgodatabasehelp<at>gmail dot com</p>';
+		$content = '<p>Welcome! This is an experiment for us. The impetus behind the database is that we have a lot of material that was created for the album "Of The Blue Colour Of The Sky" and not all of it fits into a retailer’s vision of what should live on the shelf of their store. So we thought we’d give everyone who buys the Extra Nice Edition of the album access to this webpage where you can download whatever else we think to release, without us having to find some other clever way of finding you.</p><p>To begin, we’ve got the first disc of the album, in case you bought the physical CD and didn’t feel like ripping it yourself. Second is a collection of new OK Go remixes that we are particularly excited about. Let us know what you think, and if anything doesn’t work quite right, please let us know by emailing us at <a href="mailto:webmaster@okgo.net">webmaster@okgo.net</a>.</p>';
 
 		// database access forms content
 		$content .= '<form id="validcodeform">';
@@ -116,6 +116,8 @@ function conditionally_add_scripts_and_styles($posts){
 		// enqueue here
 		wp_enqueue_style('mediadb-style', MEDIADB_PLUGIN_URL . '/css/mediadb.css');
 		wp_enqueue_script('mediadb-script', MEDIADB_PLUGIN_URL . '/resources/mediadb_scripts.js');
+		wp_localize_script('mediadb-script', 'mediadbAjax', array( 'pluginPath' => MEDIADB_PLUGIN_PATH, 
+									   'pluginURL'  => MEDIADB_PLUGIN_URL ));
 	}
  
 	return $posts;
