@@ -169,5 +169,11 @@ body #mediadb-loginform .input{
 	margin-left: 6px;
 }
 
-
+/* styles for ie8 */
+.ie8 #valid-code {
+  padding-top: 12px;
+}
+.ie8 #media-submit {
+  top: -7px !important;
+}
 
