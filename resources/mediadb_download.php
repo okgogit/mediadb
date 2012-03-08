@@ -131,9 +131,9 @@ ini_set('max_input_time',86400);
 @ini_set('zlib.output_compression', 0);
 
 // Send headers for download
-header("Pragma: public");
+header("Pragma: ");
 header("Expires: 0");
-header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+header("Cache-Control: ");
 header("Content-Description: File Transfer");
 header("Content-Type: application/force-download");
 header("Content-Type: application/octet-stream");
