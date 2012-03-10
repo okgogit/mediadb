@@ -85,8 +85,9 @@ function mediadb_page() {
 			}
 
 		$content .= '</select>';
-		$content .= '<button id="media-submit" class="button-link">Download</button>';
+		$content .= '<button type="button" id="media-submit" class="button-link">Download</button>';
 		$content .= '</form>';
+		$content .= '<iframe id="download-iframe" style="display:none"></iframe>'; 
 	}
 	return $content;
 }	

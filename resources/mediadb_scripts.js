@@ -65,17 +65,20 @@ $("#validcodeform").submit(function (e) {
 });
 
 // Script to handle media selection form
-$("#mediaselectform").submit(function (e) {
-	console.log('in mediaselectform submit');
-	var selectedMedia = $('#media-selection option:selected').val();
-	console.log(selectedMedia);
-        if ( selectedMedia !== '' ) {
+$("#media-submit").click(function (e) {
+	e.preventDefault();
+	console.log('test');
+	var selectedMedia = $('#media-selection').val();
+	$('#download-iframe').attr('src', 'http://media.okgo.net/extranice-db/extraniceedition/otbcots/otbcotsLL.zip');
+	console.log($('#download-iframe').attr('src'));
+
+	/*if ( selectedMedia !== '' ) {
 		$.download(mediadbAjax.pluginURL+'/resources/mediadb_download.php', { 'media_id' : selectedMedia }, 'post');
-        }
+    }
 	else {
 		alert('Please select something to download from the list.');
 	} 
-        return false;
+    return false;*/
 });
 
 /**
@@ -88,19 +91,23 @@ $("#mediaselectform").submit(function (e) {
 *  http://filamentgroup.com/lab/jquery_plugin_for_requesting_ajax_like_file_downloads/.
 */
 jQuery.download = function(url, data, method){
+	
 	//url and data options required
 	if( url && data ){ 
+		
 		//data can be string of parameters or array/object
 		data = typeof data == 'string' ? data : jQuery.param(data);
+		
 		//split params into form inputs
 		var inputs = '';
 		jQuery.each(data.split('&'), function(){ 
 			var pair = this.split('=');
 			inputs+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />'; 
 		});
+		
 		//send request
-		jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>')
-		.appendTo('body').submit().remove();
+		jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>').appendTo('body').submit().remove();
+
 	};
 };
 
