@@ -107,7 +107,7 @@ function conditionally_add_scripts_and_styles($posts){
  
 	$shortcode_found = false; // use this flag to see if styles and scripts need to be enqueued
 	foreach ($posts as $post) {
-		if (stripos($post->post_content, '[mediadb-page]') !== false) {
+		if (strpos($post->post_content, '[mediadb-page]') !== false) {
 			$shortcode_found = true; // bingo!
 			break;
 		}

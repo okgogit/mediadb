@@ -66,11 +66,31 @@ $("#validcodeform").submit(function (e) {
 
 // Script to handle media selection form
 $("#media-submit").click(function (e) {
+	console.log('about to call ajax');
 	e.preventDefault();
-	console.log('test');
 	var selectedMedia = $('#media-selection').val();
-	$('#download-iframe').attr('src', 'http://media.okgo.net/extranice-db/extraniceedition/otbcots/otbcotsLL.zip');
-	console.log($('#download-iframe').attr('src'));
+	if ( selectedMedia !== '' ) {
+		$.ajax({
+			url: mediadbAjax.pluginURL+'/resources/mediadb_cloudfront_download.php',
+			type: "POST",
+			async: false,
+			cache: false,
+			dataType: 'html',
+			data: { 'media_id' : selectedMedia },
+			success: function(data) {
+				//console.log(data);
+				$('#download-iframe').removeAttr('src').attr('src', data);
+					// this initiaties the download via a hidden iframe
+			},
+			error: function(xhr, textStatus) {
+				console.log(textStatus);
+			}
+		});
+	}
+	else {
+		alert('Please select something to download from the list.');
+	}
+	return false;
 
 	/*if ( selectedMedia !== '' ) {
 		$.download(mediadbAjax.pluginURL+'/resources/mediadb_download.php', { 'media_id' : selectedMedia }, 'post');
