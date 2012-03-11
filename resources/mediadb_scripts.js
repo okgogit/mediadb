@@ -36,8 +36,6 @@ $("#validcodeform").submit(function (e) {
 			data:  { 'code' : $('#code-input').val(),
 				 'user_id' : $('#user-id').val() },
 			success: function (data) {
-				//console.log('success');
-				//console.log('data:'+data.status);
 				if (data.status == 'valid') {
 					$('#code-input').attr('disabled',true);
 					$('#code-input').css('background-color','#E1F3FD');
@@ -65,9 +63,7 @@ $("#validcodeform").submit(function (e) {
 });
 
 // Script to handle media selection form
-$("#media-submit").click(function (e) {
-	console.log('about to call ajax');
-	e.preventDefault();
+$("#mediaselectform").submit(function (e) {
 	var selectedMedia = $('#media-selection').val();
 	if ( selectedMedia !== '' ) {
 		$.ajax({
@@ -78,9 +74,10 @@ $("#media-submit").click(function (e) {
 			dataType: 'html',
 			data: { 'media_id' : selectedMedia },
 			success: function(data) {
-				//console.log(data);
-				$('#download-iframe').removeAttr('src').attr('src', data);
-					// this initiaties the download via a hidden iframe
+				// remove existing download iframe if there is one
+				if ($('#downloadiframe')) $('#downloadiframe').remove();
+				//initiate the download via iframe
+				$('body').append('<iframe id="downloadiframe" style="display:none" src="'+data+'"></iframe>');
 			},
 			error: function(xhr, textStatus) {
 				console.log(textStatus);
@@ -91,7 +88,6 @@ $("#media-submit").click(function (e) {
 		alert('Please select something to download from the list.');
 	}
 	return false;
-
 	/*if ( selectedMedia !== '' ) {
 		$.download(mediadbAjax.pluginURL+'/resources/mediadb_download.php', { 'media_id' : selectedMedia }, 'post');
     }
